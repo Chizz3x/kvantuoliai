@@ -20,8 +20,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float hSpeed = Input.GetAxis("Horizontal") * moveSpeed;
-        float vSpeed = Input.GetAxis("Vertical") * moveSpeed;
+        float hSpeed = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed;
+        float vSpeed = Input.GetAxis("Vertical") * Time.deltaTime * moveSpeed;
         controller.Move(new Vector3(hSpeed, 0 , vSpeed));
 
         if(Input.GetMouseButtonDown(0) && !weaponAnimationController.animationPlaying)

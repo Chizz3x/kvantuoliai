@@ -29,8 +29,7 @@ public class WeaponAnimationController : MonoBehaviour
         _audioSource.Play();
         animationPlaying = true;
         Debug.Log(_animator.GetCurrentAnimatorStateInfo(0).length);
-        yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);
-        _animator.SetTrigger(Idle);
+        yield return new WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).IsName("Idle Dog"));
         animationPlaying = false;
         Debug.Log("Animation over");
     }
