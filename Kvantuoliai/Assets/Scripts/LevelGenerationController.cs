@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,35 +11,49 @@ public class LevelGenerationController : MonoBehaviour
     [SerializeField] public GameObject levelTemplate;
     [SerializeField] public GameObject enemyContainer;
     [SerializeField] public GameObject[] foliage;
+    
 
     private GameObject _currentLevel;
-    private int currentLevel = 1;
+    private GameObject _currentPortal;
+    private int currentLevel = 2;
+    private bool portal = false;
     
     private void Awake()
     {
         GenerateLevel(grassSprite, 4);
     }
 
+    private IEnumerator PortalActivation()
+    {
+        var portalController = _currentPortal.GetComponent<PortalController>();
+        yield return new WaitUntil(() => portalController.activated == true);
+        Destroy(_currentLevel);
+        switch (currentLevel++)
+        {
+            case 1:
+                GenerateLevel(grassSprite, 5);
+                break;
+            case 2:
+                GenerateLevel(stoneSprite, 7);
+                break;
+            case 3:
+                GenerateLevel(stoneSprite, 8);
+                break;
+            default:
+                GenerateLevel(stoneSprite, currentLevel++);
+                break;
+        }
+
+        portal = false;
+    }
+
     private void Update()
     {
-        if (enemyContainer.transform.childCount == 0)
+        if (enemyContainer.transform.childCount == 0 && !portal)
         {
-            Destroy(_currentLevel);
-            switch (currentLevel++)
-            {
-                case 1:
-                    GenerateLevel(grassSprite, 5);
-                    break;
-                case 2:
-                    GenerateLevel(stoneSprite, 7);
-                    break;
-                case 3:
-                    GenerateLevel(stoneSprite, 8);
-                    break;
-                default:
-                    GenerateLevel(stoneSprite, currentLevel++);
-                    break;
-            }
+            portal = true;
+            _currentPortal.SetActive(true);
+            StartCoroutine(PortalActivation());
         }
     }
 
@@ -53,7 +65,8 @@ public class LevelGenerationController : MonoBehaviour
         spriteRenderer.sprite = sprite;
         _currentLevel = Instantiate(levelTemplate, transform);
         _currentLevel.transform.position = Vector3.zero;
-
+        _currentPortal = _currentLevel.transform.GetChild(0).gameObject;
+        _currentPortal.SetActive(false);
         for (var i = 0; i < enemyCount; i++)
         {
             var randX = Random.Range(-20, 20);

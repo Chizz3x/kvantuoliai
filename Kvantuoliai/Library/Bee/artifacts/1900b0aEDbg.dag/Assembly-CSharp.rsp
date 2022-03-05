@@ -334,6 +334,7 @@
 "Assets/Scripts/ExplosionController.cs"
 "Assets/Scripts/LevelGenerationController.cs"
 "Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/PortalController.cs"
 "Assets/Scripts/ProjectileController.cs"
 "Assets/Scripts/WeaponAnimationController.cs"
 -langversion:9.0
