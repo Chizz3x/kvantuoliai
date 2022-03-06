@@ -8,6 +8,7 @@ public class LevelGenerationController : MonoBehaviour
     [SerializeField] public Sprite swampSprite;
     [SerializeField] public Sprite stoneSprite;
     [SerializeField] public GameObject enemyTemplate;
+    [SerializeField] public GameObject bossTemplate;
     [SerializeField] public GameObject levelTemplate;
     [SerializeField] public GameObject enemyContainer;
     [SerializeField] public GameObject[] foliage;
@@ -37,7 +38,7 @@ public class LevelGenerationController : MonoBehaviour
                 GenerateLevel(stoneSprite, 7);
                 break;
             case 3:
-                GenerateLevel(stoneSprite, 8);
+                GenerateBossLevel();
                 break;
             default:
                 GenerateLevel(stoneSprite, currentLevel++);
@@ -61,7 +62,8 @@ public class LevelGenerationController : MonoBehaviour
 
     private void GenerateLevel(Sprite sprite, int enemyCount)
     {
-        var spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        var ground = transform.GetChild(0).GetChild(1);
+        var spriteRenderer = ground.GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = sprite;
         _currentLevel = Instantiate(levelTemplate, transform);
         _currentLevel.transform.position = Vector3.zero;
@@ -77,6 +79,31 @@ public class LevelGenerationController : MonoBehaviour
             var enemyController = newEnemy.GetComponent<EnemyController>();
             enemyController.enabled = true;
         }
+
+        for (var i = 0; i < 20; i++)
+        {
+            var randX = Random.Range(-20, 20);
+            var randZ = Random.Range(-15, 15);
+            var foliageType = Random.Range(0, foliage.Length);
+            var fol = Instantiate(foliage[foliageType], _currentLevel.transform);
+            fol.transform.position = new Vector3(randX, 0, randZ);
+        }
+    }
+    
+    private void GenerateBossLevel()
+    {
+        var ground = transform.GetChild(0).GetChild(1);
+        var spriteRenderer = ground.GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = stoneSprite;
+        _currentLevel = Instantiate(levelTemplate, transform);
+        _currentLevel.transform.position = Vector3.zero;
+        _currentPortal = _currentLevel.transform.GetChild(0).gameObject;
+        _currentPortal.SetActive(false);
+
+        var boss = Instantiate(bossTemplate, enemyContainer.transform);
+        var bossController = boss.GetComponent<BossController>();
+        bossController.enabled = true;
+        boss.transform.position = transform.position;
 
         for (var i = 0; i < 20; i++)
         {

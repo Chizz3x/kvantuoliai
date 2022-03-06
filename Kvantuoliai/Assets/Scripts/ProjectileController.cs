@@ -37,6 +37,19 @@ public class ProjectileController : MonoBehaviour
                 Destroy(gameObject);
             }
         }
+        else if (hitName == "Player Collider" && !friendly)
+        {
+            var enemyComponent = other.GetComponent<PlayerController>();
+            enemyComponent.TakeDmg(dmg);
+            if (explodeTime > 0)
+            {
+                Explode();
+            }
+            if (!piercing)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     public IEnumerator Fire(Vector3 forceVector)
