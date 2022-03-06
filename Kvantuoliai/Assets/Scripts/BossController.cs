@@ -12,6 +12,7 @@ public class BossController : MonoBehaviour
     private ParticleSystem _particleSystem;
 
     [SerializeField] public GameObject projectile;
+    [SerializeField] public int maxHp = 500;
     
     private static readonly int Attack4 = Animator.StringToHash("Attack1");
     private static readonly int Attack5 = Animator.StringToHash("Attack2");

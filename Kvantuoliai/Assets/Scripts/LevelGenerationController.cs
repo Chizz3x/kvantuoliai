@@ -104,6 +104,7 @@ public class LevelGenerationController : MonoBehaviour
         var bossController = boss.GetComponent<BossController>();
         bossController.enabled = true;
         boss.transform.position = transform.position;
+        boss.transform.name = "Enemy";
 
         for (var i = 0; i < 20; i++)
         {
@@ -114,4 +115,4 @@ public class LevelGenerationController : MonoBehaviour
             fol.transform.position = new Vector3(randX, 0, randZ);
         }
     }
-}
+}   
